@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import { useState } from "react";
+import { useEffect } from "react";
+import UsersList from "./components/UsersList";
+import UsersForm from "./components/UsersForm";
+import "./styles.css";
 
 function App() {
-  return (
+  const [users, setUsers]= useState([]);
+  const [ userSelected,setUserSelected] = useState(null);
+  
+  useEffect(() => {
+    axios
+    .get("https://users-crud1.herokuapp.com/users/")
+    .then((res)=> setUsers(res.data));
+  },[]);
+  
+  const getUsers = () => {
+    axios
+      .get("https://users-crud1.herokuapp.com/users/")
+      .then((res) => setUsers(res.data));
+  };
+  
+  console.log(userSelected)
+  return(
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <UsersForm getUsers={getUsers} userSelected={userSelected} />
+      <UsersList users={users} setUserSelected={setUserSelected} />
     </div>
   );
+  
+
+
+
 }
 
 export default App;
