@@ -2,7 +2,6 @@ import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
 import UsersList from "./components/UsersList";
-import UsersForm from "./components/UsersForm";
 import "./styles.css";
 import ModalScreen from "./components/ModalScreen";
 
@@ -37,7 +36,7 @@ function App() {
 
   return (
     <div className="App">
-      <div className="toolbar"> <h1> Usuarios</h1>
+      <div className="toolbar"> <h1> Users</h1>
         <div className="toolbar-button">
           <button className="button-new" onClick={openModal}>
             <i className="fa-solid fa-plus-large"></i><p>New User</p>

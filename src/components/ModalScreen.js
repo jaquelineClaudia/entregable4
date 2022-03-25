@@ -84,7 +84,7 @@ const ModalScreen = ({getUsers,userSelected,setUserSelected,modalIsOpen, setIsOp
                         closeTimeoutMS={200}
                         overlayClassName="modal-background"
                   >
-                        <div className='content-form' >
+                        <div className='content-form'>
                               <form onSubmit={submit}>
                                     <div className="first-name">
                                           <label htmlFor="first_name">First Name</label>
