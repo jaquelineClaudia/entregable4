@@ -3,12 +3,14 @@ import {useState} from 'react';
 import { useEffect } from "react";
 import axios from 'axios';
 
-const UsersForm = ({getUsers,userSelected}) => {
+
+
+const UsersForm = ({getUsers,userSelected,setUserSelected }) => {
       const[first_name,setFirst_name] = useState ("");
       const[last_name,setLast_name] = useState ("");
       const[email,setEmail] = useState ("");
       const[password,setPassword] = useState ("");
-      const[bithday,setBithday] = useState ("");
+      const[birthday,setBirthday] = useState ("");
       
 
       useEffect(() => {
@@ -17,7 +19,7 @@ const UsersForm = ({getUsers,userSelected}) => {
               setLast_name(userSelected.last_name);
               setEmail(userSelected.email);
               setPassword(userSelected.password);
-              setBithday(userSelected.bithday);
+              setBirthday(userSelected.birthday);
              
             }
           }, [userSelected]);
@@ -31,66 +33,94 @@ const UsersForm = ({getUsers,userSelected}) => {
                   last_name,
                   email,
                   password,
-                  bithday,
-                  
+                  birthday,
             }
-            axios.post('https://users-crud1.herokuapp.com/users/',user) 
-                 .then(() =>{
-                        getUsers();
-                        setFirst_name("");
-                        setLast_name("");
-                        setEmail("");
-                        setPassword("");
-                        setBithday("");
-                        
-                });
-            };
+            if(userSelected){
+              console.log("update");
+              axios.put(`https://users-crud1.herokuapp.com/users/${userSelected.id}/`,user)
+                   .then(()=>{
+                     getUsers()
+                     setUserSelected(null)
+                     reset();
+                   });
+            }else{
+              axios.post('https://users-crud1.herokuapp.com/users/',user) 
+              .then(() =>{
+                  getUsers();
+                  reset();
+             })
+             .catch(error =>console.log(error.response));
+         }
+
+      }
+
+      const reset =()=>{
+        setFirst_name("");
+        setLast_name("");
+        setEmail("");
+        setPassword("");
+        setBirthday(""); 
+      }
           
-            return (
+          
+          return (
+            <div className='content-form' animate__animated animate__fadeInDown>
               <form onSubmit={submit}>
-                <div className="input-container">
-                  <label htmlFor="first_name">first name</label>
+                <div className="first-name">
+                  <label htmlFor="first_name">First Name</label>
                   <input
                     type="text"
+                    placeholder='Jimin'
                     onChange={(e) => setFirst_name(e.target.value)}
                     value={first_name}
                   />
                 </div>
-                <div className="input-container">
+                <div className="last-name">
                   <label htmlFor="last_name">Last Name</label>
                   <input
                     type="text"
+                    placeholder='Park'
                     onChange={(e) => setLast_name(e.target.value)}
                     value={last_name}
                   />
                 </div>
-                <div className="input-container">
+                <div className="email">
                   <label htmlFor="email">Email</label>
                   <input
                     type="email"
+                    placeholder='user@user.com'
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
                   />
                 </div>
-                <div className="input-container">
+                <div className="password">
                   <label htmlFor="password">Password</label>
                   <input
                     type="password"
+                    placeholder='*********'
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                   />
                 </div>
-                <div className="input-container">
-                  <label htmlFor="bithday">Birthday</label>
+                <div className="birthday">
+                  <label htmlFor="birthday">Birthday</label>
                   <input
                     type="date"
-                    onChange={(e) => setBithday(e.target.value)}
-                    value={bithday}
+                    placeholder='birthday'
+                    onChange={(e) => setBirthday(e.target.value)}
+                    value={birthday}
                   />
                 </div>
-    
-                <button>Submit</button>
+                <div className='button'>
+                  <div>
+                    <button className='button-submit'><i class="fa-light fa-arrow-up-from-square"></i>Submit</button>
+                  </div>
+                  <div>
+                    <button className='button-deselect' onClick={() => reset()} type="button"><i class="fa-light fa-hexagon-xmark"></i>Deselect</button>
+                  </div>
+                </div>
               </form>
+            </div>
             );
           };          
 export default UsersForm;
